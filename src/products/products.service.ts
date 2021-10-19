@@ -55,10 +55,9 @@ export class ProductsService {
     updatedProduct.save();
   }
 
-  deleteProduct(prodId: string) {
-    const index = this.findProduct(prodId)[1];
-    // remove an element from this index
-    this.products.splice(index, 1);
+  async deleteProduct(id: string) {
+    const product = await this.findProduct(id);
+    product.remove();
   }
 
   private async findProduct(id: string): Promise<Product> {
