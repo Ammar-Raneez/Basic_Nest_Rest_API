@@ -5,6 +5,6 @@ export class AppService {
   getHello(): { name: string } {
     // nestjs automatically infers the return type
     // therefore we don't have to specifically say application/json
-    return { name: 'ammar' };
+    return { name: 'hello world' };
   }
 }

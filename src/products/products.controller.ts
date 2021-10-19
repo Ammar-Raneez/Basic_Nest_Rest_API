@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import { ProductsService } from './products.service';
 
@@ -9,13 +10,13 @@ export class ProductsController {
 
   // the data obtained is different in nest
   @Post()
-  addProduct(
+  async addProduct(
     // parse the title attribute and store in prodTitle key
     @Body('title') prodTitle: string,
     @Body('description') prodDesc: string,
     @Body('price') prodPrice: number,
   ) {
-    const addedId = this.productsService.addProduct(prodTitle, prodDesc, prodPrice);
+    const addedId = await this.productsService.addProduct(prodTitle, prodDesc, prodPrice);
     return { id: addedId };
   }
 
