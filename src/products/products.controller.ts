@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { ProductsService } from './products.service';
 
 // direct all /products to this controller
@@ -17,6 +17,12 @@ export class ProductsController {
   ) {
     const addedId = this.productsService.addProduct(prodTitle, prodDesc, prodPrice);
     return { id: addedId };
+  }
+
+  @Get(':id')
+  // the @Param('id') gets the 'id' param we specify in the path
+  getProduct(@Param('id') prodId: string) {
+    return this.productsService.getProduct(prodId);
   }
 
   @Get()
