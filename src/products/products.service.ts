@@ -1,9 +1,9 @@
-import { Injectable } from "@nestjs/common";
-import { Product } from "./product.model";
+import { Injectable } from '@nestjs/common';
+import { Product } from './product.model';
 
 @Injectable()
 export class ProductsService {
-  products: Product[] = [];
+  private products: Product[] = [];
 
   addProduct(title: string, description: string, price: number) {
     const prodId = new Date().toString();
@@ -15,7 +15,12 @@ export class ProductsService {
     );
 
     this.products.push(newProduct);
-    console.log(this.products);
     return prodId;
+  }
+
+  getProducts() {
+    // return a copy to not return reference to actual private products array
+    // return [...this.products]; or below
+    return this.products.slice();
   }
 }

@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { ProductsService } from './products.service';
 
 // direct all /products to this controller
@@ -17,5 +17,11 @@ export class ProductsController {
   ) {
     const addedId = this.productsService.addProduct(prodTitle, prodDesc, prodPrice);
     return { id: addedId };
+  }
+
+  @Get()
+  getAllProducts() {
+    // arrays are sent as json by default
+    return this.productsService.getProducts();
   }
 }
