@@ -20,18 +20,16 @@ export class ProductsService {
 
     // mongoose query to save in db
     const result = await newProduct.save();
-    console.log(result);
     return result.id as string;
   }
 
-  getProducts() {
-    // return a copy to not return reference to actual private products array
-    // return [...this.products]; or below
-    return this.products.slice();
+  async getProducts() {
+    const products = await this.productModel.find().exec();
+    return products as Product[];
   }
 
-  getProduct(id: string) {
-    const product = this.findProduct(id)[0];
+  async getProduct(id: string) {
+    const product = await this.findProduct(id);
     return { ...product };
   }
 
@@ -41,21 +39,21 @@ export class ProductsService {
     description: string,
     price: number,
   ) {
-    const [product, index] = this.findProduct(id);
-    const updatedProduct = { ...product };
-    if (title) {
-      updatedProduct.title = title;
-    }
+    // const [product, index] = this.findProduct(id);
+    // const updatedProduct = { ...product };
+    // if (title) {
+    //   updatedProduct.title = title;
+    // }
 
-    if (description) {
-      updatedProduct.description = description;
-    }
+    // if (description) {
+    //   updatedProduct.description = description;
+    // }
 
-    if (price) {
-      updatedProduct.price = price;
-    }
+    // if (price) {
+    //   updatedProduct.price = price;
+    // }
 
-    this.products[index] = updatedProduct;
+    // this.products[index] = updatedProduct;
   }
 
   deleteProduct(prodId: string) {
@@ -64,13 +62,16 @@ export class ProductsService {
     this.products.splice(index, 1);
   }
 
-  private findProduct(id: string): [Product, number] {
-    const index = this.products.findIndex((prod) => prod.id === id);
-    const product = this.products.find((prod) => prod.id === id);
-    if (!product) {
-      throw new NotFoundException('Could not find product');
+  private async findProduct(id: string): Promise<Product> {
+    try {
+      const product = await this.productModel.findById(id);
+      if (!product) {
+        throw new NotFoundException('Could not find product');
+      }
+    
+      return product;
+    } catch (err) {
+      throw new NotFoundException(err);
     }
-  
-    return [product, index];
   }
 }
