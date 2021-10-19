@@ -24,13 +24,41 @@ export class ProductsService {
     return this.products.slice();
   }
 
-  getProduct(productId: string) {
-    const product = this.products.find((prod) => prod.id === productId);
-    if (!product) {
-      // nestjs has their own way of returning errors
-      throw new NotFoundException('Could not find product');
+  getProduct(id: string) {
+    const product = this.findProduct(id)[0];
+    return { ...product };
+  }
+
+  updateProduct(
+    id: string,
+    title: string,
+    description: string,
+    price: number,
+  ) {
+    const [product, index] = this.findProduct(id);
+    const updatedProduct = { ...product };
+    if (title) {
+      updatedProduct.title = title;
     }
 
-    return product;
+    if (description) {
+      updatedProduct.description = description;
+    }
+
+    if (price) {
+      updatedProduct.price = price;
+    }
+
+    this.products[index] = updatedProduct;
+  }
+
+  private findProduct(id: string): [Product, number] {
+    const index = this.products.findIndex((prod) => prod.id === id);
+    const product = this.products.find((prod) => prod.id === id);
+    if (!product) {
+      throw new NotFoundException('Could not find product');
+    }
+  
+    return [product, index];
   }
 }
