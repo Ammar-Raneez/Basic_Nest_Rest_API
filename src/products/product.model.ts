@@ -18,7 +18,9 @@ export const ProductSchema = new mongoose.Schema({
   }
 });
 
-export interface Product {
+// along with our defined attributes, extend the 
+// defaultly available mongoose Document attributes
+export interface Product extends mongoose.Document {
   id: string,
   title: string,
   description: string,
